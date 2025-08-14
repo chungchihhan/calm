@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -44,3 +44,44 @@ def list_events(service, start_iso: str, end_iso: str) -> List[Dict]:
         timeZone=str(DEFAULT_TZ),
     ).execute()
     return res.get("items", [])
+
+def create_event(
+    service,
+    title: str,
+    *,
+    start_dt: Optional[dt.datetime] = None,
+    end_dt: Optional[dt.datetime] = None,
+    start_date: Optional[dt.date] = None,
+    end_date: Optional[dt.date] = None,
+    description: Optional[str] = None,
+    location: Optional[str] = None,
+    timezone: Optional[str] = None,
+) -> Dict:
+    """
+    Create an event. Provide either (start_dt, end_dt) for timed events
+    OR (start_date, end_date) for all-day events (end_date is exclusive).
+    """
+    tz = timezone or str(DEFAULT_TZ)
+
+    if start_dt and end_dt:
+        body = {
+            "summary": title,
+            "start": {"dateTime": start_dt.astimezone(DEFAULT_TZ).isoformat(), "timeZone": tz},
+            "end": {"dateTime": end_dt.astimezone(DEFAULT_TZ).isoformat(), "timeZone": tz},
+        }
+    elif start_date and end_date:
+        # All-day events use date (end is exclusive)
+        body = {
+            "summary": title,
+            "start": {"date": start_date.isoformat(), "timeZone": tz},
+            "end": {"date": end_date.isoformat(), "timeZone": tz},
+        }
+    else:
+        raise ValueError("Invalid arguments: provide timed (start_dt,end_dt) OR all-day (start_date,end_date).")
+
+    if description:
+        body["description"] = description
+    if location:
+        body["location"] = location
+
+    return service.events().insert(calendarId="primary", body=body).execute()

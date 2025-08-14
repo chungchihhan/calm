@@ -78,3 +78,18 @@ def print_events_table(items: list[dict]) -> None:
 
     out = tabulate(rows, headers=["Subject", "Time"], tablefmt="fancy_grid", disable_numparse=True)
     typer.echo(out)
+
+
+def parse_local_datetime(s: str) -> dt.datetime:
+    """Accept 'YYYY-MM-DD HH:MM' or 'YYYY/MM/DD HH:MM' in local tz."""
+    s = s.strip()
+    fmt = "%Y-%m-%d %H:%M" if "-" in s.split()[0] else "%Y/%m/%d %H:%M"
+    return dt.datetime.strptime(s, fmt).replace(tzinfo=DEFAULT_TZ)
+
+def parse_date(s: str) -> dt.date:
+    """Accept 'YYYY-MM-DD' or 'YYYY/MM/DD'."""
+    s = s.strip()
+    if "-" in s:
+        return dt.date.fromisoformat(s)
+    y, m, d = map(int, s.split("/"))
+    return dt.date(y, m, d)
