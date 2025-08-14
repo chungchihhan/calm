@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 import json
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -9,11 +6,12 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-from .config import (CAL_SCOPES, GOOGLE_CREDENTIALS_PATH, GOOGLE_TOKEN_PATH,
-                     ensure_600)
+from calm.infra.settings import (CAL_SCOPES, GOOGLE_CREDENTIALS_PATH,
+                                 GOOGLE_TOKEN_PATH, ensure_600)
 
 
 def import_oauth_client_from_json_string(raw: str) -> None:
+    """Import OAuth client from a JSON string."""
     data = json.loads(raw)
     if not any(k in data for k in ("installed", "web")):
         raise ValueError("Invalid OAuth client JSON (need 'installed' or 'web').")
@@ -21,6 +19,7 @@ def import_oauth_client_from_json_string(raw: str) -> None:
     ensure_600(GOOGLE_CREDENTIALS_PATH)
 
 def import_oauth_client_from_path(path: str) -> None:
+    """Import OAuth client from a file path."""
     p = Path(path).expanduser().resolve()
     if not p.exists():
         raise FileNotFoundError(f"credentials.json not found: {p}")
@@ -31,6 +30,7 @@ def import_oauth_client_from_path(path: str) -> None:
     ensure_600(GOOGLE_CREDENTIALS_PATH)
 
 def get_calendar_credentials() -> Credentials:
+    """Get Google Calendar credentials, refreshing or authorizing as needed."""
     creds: Optional[Credentials] = None
     if GOOGLE_TOKEN_PATH.exists():
         creds = Credentials.from_authorized_user_file(str(GOOGLE_TOKEN_PATH), CAL_SCOPES)
@@ -53,5 +53,6 @@ def get_calendar_credentials() -> Credentials:
     return creds
 
 def reset_tokens() -> None:
+    """Delete the token file, forcing reauthorization next time."""
     if GOOGLE_TOKEN_PATH.exists():
         GOOGLE_TOKEN_PATH.unlink()

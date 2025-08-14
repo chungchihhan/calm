@@ -12,4 +12,4 @@ dependencies = [
 ]
 
 [project.scripts]
-calm = "calm.cli:app"
+calm = "calm.app:app"
