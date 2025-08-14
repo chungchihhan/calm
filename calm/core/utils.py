@@ -11,9 +11,9 @@ from calm.infra.settings import DEFAULT_TZ
 # ---- 顏色工具：整列同色（處理多行） ----
 class ANSI:
     RESET = "\033[0m"
-    GREEN = "\033[32m"   # 未來
-    YELLOW = "\033[1;93m"  # 進行中（粗體亮黃，對比高）
-    GRAY = "\033[90m"    # 過去
+    GRAY = "\033[90m"      # 過去
+    GREEN = "\033[1;32m"   # 進行中
+    WHITE = "\033[97m"     # 未來
 
 def colorize_multiline(text: str, color_code: str) -> str:
     """讓多行文字每一行都帶相同顏色（避免只有第一行有色）。"""
@@ -22,9 +22,9 @@ def colorize_multiline(text: str, color_code: str) -> str:
 def color_for_event(start_dt, end_dt) -> str:
     now = dt.datetime.now(tz=DEFAULT_TZ)
     if start_dt <= now <= end_dt:
-        return ANSI.YELLOW
-    if start_dt > now:
         return ANSI.GREEN
+    if start_dt > now:
+        return ANSI.WHITE
     return ANSI.GRAY
 
 def _parse_google_time(s: str) -> tuple[dt.datetime, bool]:
@@ -60,10 +60,19 @@ def time_span_str(start_dt: dt.datetime, end_dt: dt.datetime, all_day: bool) -> 
         return f"{start_dt.strftime('%Y/%m/%d')} ~ {disp_end.strftime('%Y/%m/%d')}" # Multi-Day All Day
     return f"{start_dt.strftime('%Y/%m/%d %H:%M')} ~ {end_dt.strftime('%Y/%m/%d %H:%M')}"
 
+def _legend_line() -> str:
+    return "  ".join([
+        f"{ANSI.GRAY}■{ANSI.RESET} Past",
+        f"{ANSI.GREEN}■{ANSI.RESET} In Progress",
+        f"{ANSI.WHITE}■{ANSI.RESET} Upcoming",
+    ])
+
 def print_events_table(items: list[dict]) -> None:
     if not items:
         typer.echo("No events found.")
         return
+    
+    typer.echo(_legend_line())
     
     rows = []
     for ev in items:
