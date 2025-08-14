@@ -7,7 +7,7 @@ import typer
 from calm.core.onboarding import ensure_onboard_if_needed
 from calm.core.utils import (parse_date, parse_local_datetime,
                              print_events_table)
-from calm.infra.auth import get_calendar_credentials
+from calm.infra.calendar_oauth import get_calendar_credentials
 from calm.infra.settings import DEFAULT_TZ
 from calm.services.calendar_service import (build_calendar_service,
                                             create_event, day_range,

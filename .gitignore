@@ -2,4 +2,8 @@ venv/*
 
 *.egg-info/
 
-*/__pycache__/
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
