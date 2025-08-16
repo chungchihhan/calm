@@ -3,9 +3,10 @@ from typing import Optional
 
 import typer
 
-from calm.infra.auth import (get_calendar_credentials,
-                             import_oauth_client_from_json_string,
-                             import_oauth_client_from_path, reset_tokens)
+from calm.infra.calendar_oauth import (get_calendar_credentials,
+                                       import_oauth_client_from_json_string,
+                                       import_oauth_client_from_path,
+                                       reset_tokens)
 from calm.infra.settings import GOOGLE_CREDENTIALS_PATH
 
 configure_app = typer.Typer(help="Configure OAuth")
