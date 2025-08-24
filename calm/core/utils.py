@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime as dt
 
 import typer
-from tabulate import tabulate
 
 from calm.infra.settings import DEFAULT_TZ
 
