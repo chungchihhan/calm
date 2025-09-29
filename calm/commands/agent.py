@@ -14,7 +14,7 @@ agent_app = typer.Typer(help="Natural-language agent for Calendar")
 @agent_app.command("agent", help="Understand natural language and read/add events via tools")
 def agent(
     text: str = typer.Argument(..., help="Your instruction, e.g. '明天下午2點加會議' or '這週的行程'"),
-    model: str = typer.Option("gemini-1.5-flash", "--model", help="Gemini model"),
+    model: str = typer.Option("gemini-2.5-flash-lite", "--model", help="Gemini model to use, e.g. gemini-2.5-flash-lite, gemini-2.5-flash, gemini-2.5-pro"),
     api_key: Optional[str] = typer.Option(None, "--api-key", help="GEMINI_API_KEY or ~/.config/calm/gemini.key if omitted"),
     json_out: bool = typer.Option(False, "--json", help="Return final text in JSON (disables streaming)"),
     stream: bool = typer.Option(True, "--stream/--no-stream", help="Stream final answer (default on)"),

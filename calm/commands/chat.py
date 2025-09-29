@@ -14,7 +14,7 @@ chat_app = typer.Typer(help="One-shot Gemini chat")
 @chat_app.command("chat", help="Ask Gemini a question once and get an answer")
 def chat(
     question: str = typer.Argument(..., help="Your question for Gemini"),
-    model: str = typer.Option("gemini-1.5-flash", "--model", help="e.g. gemini-1.5-flash, gemini-1.5-pro"),
+    model: str = typer.Option("gemini-2.5-flash-lite", "--model", help="e.g. gemini-2.5-flash-lite, gemini-2.5-flash, gemini-2.5-pro"),
     api_key: Optional[str] = typer.Option(None, "--api-key", help="Fallback: $GEMINI_API_KEY or ~/.config/calm/gemini.key"),
     json_out: bool = typer.Option(False, "--json", help="Output JSON with model and answer"),
     stream: bool = typer.Option(

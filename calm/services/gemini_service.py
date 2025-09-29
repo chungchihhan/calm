@@ -7,7 +7,7 @@ def one_time_chat(
     prompt: str,
     *,
     api_key: str,
-    model: str = "gemini-1.5-flash",
+    model: str = "gemini-2.5-flash-lite",
     stream: bool = False,
 ) -> Union[Iterator[str], str]:
     """
