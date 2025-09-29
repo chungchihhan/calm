@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime as dt
 
 import typer
-from tabulate import tabulate
 
 from calm.infra.settings import DEFAULT_TZ
 
@@ -71,10 +70,9 @@ def print_events_table(items: list[dict]) -> None:
     if not items:
         typer.echo("No events found.")
         return
-    
+
     typer.echo(_legend_line())
-    
-    rows = []
+
     for ev in items:
         subject = ev.get("summary") or "No Subject"
         start_dt, end_dt, is_all_day = parse_event_times(ev)
@@ -83,10 +81,8 @@ def print_events_table(items: list[dict]) -> None:
         color = color_for_event(start_dt, end_dt)
         subject_colored = colorize_multiline(subject, color)
         span_colored = colorize_multiline(span, color)
-        rows.append([subject_colored, span_colored])
 
-    out = tabulate(rows, headers=["Subject", "Time"], tablefmt="fancy_grid", disable_numparse=True)
-    typer.echo(out)
+        typer.echo(f"{span_colored}：{subject_colored}")
 
 
 def parse_local_datetime(s: str) -> dt.datetime:

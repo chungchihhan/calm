@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typer
 
+from calm.commands.agent import agent_app
 from calm.commands.chat import chat_app
 from calm.commands.configure import configure_app
 from calm.commands.events import events_app
@@ -11,6 +12,7 @@ app = typer.Typer(help="calm: A simple CLI tool to interact with Google Calendar
 app.add_typer(configure_app, name="configure")
 app.add_typer(events_app, name="") 
 app.add_typer(chat_app, name="")  
+app.add_typer(agent_app, name="")
 
 @app.callback(invoke_without_command=True)
 def _root():
