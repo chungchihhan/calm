@@ -217,7 +217,7 @@ def agent_once(
     user_text: str,
     *,
     api_key: str,
-    model: str = "gemini-1.5-flash",
+    model: str = "gemini-2.5-flash-lite",
     stream_final: bool = True,
 ):
     m = _ensure_gemini(model, api_key)
